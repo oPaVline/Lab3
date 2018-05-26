@@ -1,6 +1,7 @@
 package barBossHouse;
 
 import java.util.Objects;
+import java.time.LocalDateTime;
 
 public class InternetOrder implements Order{
 
@@ -8,6 +9,7 @@ public class InternetOrder implements Order{
     private ListNode head;
     private ListNode tail;
     private Customer customer;
+    private LocalDateTime dateTime;
 
     public InternetOrder() {
         size = 0;
@@ -305,6 +307,16 @@ public class InternetOrder implements Order{
         void setNext(ListNode next) {
             this.next = next;
         }
+    }
+
+    @Override
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    @Override
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
 }

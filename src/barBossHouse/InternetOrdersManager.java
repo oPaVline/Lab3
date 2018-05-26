@@ -1,5 +1,8 @@
 package barBossHouse;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class InternetOrdersManager implements OrdersManager {
 
     private QueueNode head;
@@ -58,7 +61,61 @@ public class InternetOrdersManager implements OrdersManager {
         return size;
     }
 
-    @Override
+    public int getOrdersCountByDay(LocalDate date) {
+        int count = 0;
+        QueueNode current = head;
+
+        while (current != null) {
+            if (date.equals(current.value.getDateTime().toLocalDate()))
+                count++;
+
+            current = current.next;
+        }
+
+        return count;
+    }
+
+    public Order[] getOrdersByDay(LocalDate date) {
+        Order[] newOrders = new Order[getOrdersCountByDay(date)];
+        QueueNode node = head;
+
+        int j = 0;
+
+        while (node != null) {
+            if (date.equals(node.value.getDateTime().toLocalDate())) {
+                newOrders[j] = node.value;
+                j++;
+            }
+            node = node.next;
+        }
+
+        return newOrders;
+    }
+
+    public Order[] getClientOrder(Customer customer) {
+        int count = 0;
+        QueueNode node = head;
+
+        while (node != null) {
+            if (customer.equals(node.value.getCustomer()))
+                count++;
+            node = node.next;
+        }
+
+        Order[] newOrders = new Order[count];
+        int j = 0;
+
+        while (node != null) {
+            if (customer.equals(node.value.getCustomer())) {
+                newOrders[j] = node.value ;
+                j++;
+            }
+            node = node.next;
+        }
+
+        return newOrders;
+    }
+
     public Order[] getOrders() {
         Order[] orders = new Order[size];
         QueueNode node = head;

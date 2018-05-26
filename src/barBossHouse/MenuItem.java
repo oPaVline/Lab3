@@ -14,6 +14,8 @@ private  static final double DEFAULT_COST = 0;
     }
 
     protected MenuItem(String name, String description, double cost ){
+        if(cost < 0) throw new IllegalArgumentException("Cost must be positive!");
+
         this.name = name;
         this.description = description;
         this.cost = cost;
@@ -39,11 +41,7 @@ private  static final double DEFAULT_COST = 0;
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder().append(name)
-                .append(",")
-                .append(cost)
-                .append("p.");
-        return str.toString().replaceAll("-1", "");
+        return String.format("%s, %f.2 RUB", name, cost);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package barBossHouse;
 
+import java.time.LocalDateTime;
+
 public interface Order {
 
     boolean add(MenuItem item);
@@ -24,6 +26,9 @@ public interface Order {
 
     Customer getCustomer();
     void setCustomer(Customer customer);
+
+    LocalDateTime getDateTime();
+    void setDateTime(LocalDateTime dateTime);
 
     @Override
     String toString();

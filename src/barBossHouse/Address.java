@@ -24,6 +24,15 @@ public final class Address {
     }
 
     public Address(String cityName, int zipCode, String streetName, int buildingNumber, char buildingLetter, int apartmentNumber) {
+        if (buildingNumber < 0)
+            throw new IllegalArgumentException("Building's number cannot be a negative number");
+        if (zipCode < 0)
+            throw new IllegalArgumentException("ZIPCODE number cannot be a negative number");
+        if (apartmentNumber < 0)
+            throw new IllegalArgumentException("Apartment's number cannot be a negative number");
+        if (!Character.isLetter(buildingLetter))
+            throw new IllegalArgumentException("Building's letter must be a letter!");
+
         this.cityName = cityName;
         this.zipCode = zipCode;
         this.streetName = streetName;
@@ -60,18 +69,13 @@ public final class Address {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("Your address: ").append(cityName)
-                .append(" ")
-                .append(zipCode)
-                .append(",")
-                .append(" ")
-                .append(streetName)
-                .append(" ")
-                .append(buildingNumber)
-                .append(buildingLetter)
-                .append("-")
-                .append(apartmentNumber);
-        return str.toString().replaceAll("-1", "");
+        return String.format("Address: %s, %d, %s, %d, %c,-%d",
+                cityName,
+                zipCode,
+                streetName,
+                buildingNumber,
+                buildingLetter,
+                apartmentNumber).replaceAll("-1", "");
     }
 
 

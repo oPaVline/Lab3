@@ -1,37 +1,43 @@
 package barBossHouse;
 
 import java.util.Objects;
+import java.time.LocalDateTime;
+import  java.time.LocalDate ;
 
 public final class Customer {
 
     private String firstName;
     private String secondName;
-    private int age;
+    private LocalDate birthDay;
     private Address address;
 
     private static final String EMPTY_VALUE = "";
     private static final int EMPTY_NUMBER = -1;
 
-    public static final Customer NOT_MATURE_UNKNOWN_CUSTOMER = new Customer(14);
-    public static final Customer MATURE_UNKNOWN_CUSTOMER = new Customer(21);
+    public static final Customer NOT_MATURE_UNKNOWN_CUSTOMER =
+            new Customer(LocalDate.of(LocalDate.now().getYear() - 14, 1, 1));
+    public static final Customer MATURE_UNKNOWN_CUSTOMER =
+            new Customer(LocalDate.of(LocalDate.now().getYear() - 18, 1, 1));
 
     public Customer() {
-        this(EMPTY_VALUE, EMPTY_VALUE, EMPTY_NUMBER, Address.EMPTY_ADDRESS);
+        this(EMPTY_VALUE, EMPTY_VALUE, null, Address.EMPTY_ADDRESS);
     }
 
-    public Customer(int age) {
-        this(EMPTY_VALUE, EMPTY_VALUE, age, Address.EMPTY_ADDRESS);
+    public Customer(LocalDate birthDay) {
+        this(EMPTY_VALUE, EMPTY_VALUE, birthDay, Address.EMPTY_ADDRESS);
     }
 
-    public Customer(String firstName, String secondName, int age, Address address) {
+    public Customer(String firstName, String secondName, LocalDate birthDay, Address address)  {
+        if(birthDay.isAfter(LocalDate.now()))
+            throw new IllegalArgumentException("Date of birth cant be in the future");
         this.firstName = firstName;
         this.secondName = secondName;
-        this.age = age;
+        this.birthDay = birthDay;
         this.address = address;
     }
 
     public int getAge() {
-        return age;
+        return LocalDate.now().getYear() - birthDay.getYear();
     }
 
     public String getFirstName() {
@@ -50,18 +56,18 @@ public final class Customer {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Customer customer = (Customer) obj;
-        return getAge() == customer.getAge() &&
-                Objects.equals(getFirstName(), customer.getFirstName()) &&
-                Objects.equals(getSecondName(), customer.getSecondName()) &&
-                Objects.equals(getAddress(), customer.getAddress());
+
+        if (obj == null || this.getClass() == this.getClass()) return false;
+
+        Customer object = (Customer) obj;
+
+        return (firstName.equals(object.firstName) && secondName.equals(object.secondName) && birthDay.equals(object.birthDay) && address.equals(object.address));
     }
 
     @Override
     public int hashCode() {
 
-        return firstName.hashCode() ^ secondName.hashCode() ^ Integer.hashCode(age) ^ address.hashCode();
+        return firstName.hashCode() ^ secondName.hashCode() ^ birthDay.hashCode() ^ address.hashCode();
     }
 
     @Override
@@ -70,7 +76,7 @@ public final class Customer {
                 .append(" ")
                 .append(firstName)
                 .append(",")
-                .append(age);
+                .append(birthDay);
         if (address.equals(Address.EMPTY_ADDRESS)) {
             str.append(",")
                     .append(address);

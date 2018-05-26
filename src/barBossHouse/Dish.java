@@ -14,7 +14,7 @@ public class Dish extends MenuItem {
 
     @Override
     public String toString() {
-        return "Dish: " + super.toString() + " " + getDescription();
+        return String.format("Dish: %s - %s", super.toString(), getDescription());
     }
 
     @Override

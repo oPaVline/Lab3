@@ -2,6 +2,10 @@ package barBossHouse;
 
 import java.util.function.Predicate;
 import java.util.Objects;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import exceptionsPackage.NegativeSizeException;
+import exceptionsPackage.UnlawfulActionException;
 
 public class TableOrdersManager implements OrdersManager {
     private Order[] orders;
@@ -19,7 +23,7 @@ public class TableOrdersManager implements OrdersManager {
         orders[tableNumber].add(item);
     }
 
-    public Order getOrder(int tableNumber) {
+    public Order getOrders(int tableNumber) {
         return orders[tableNumber];
     }
 
@@ -108,7 +112,7 @@ public class TableOrdersManager implements OrdersManager {
         return orders;
     }
 
-    public double orderCostSummary() {
+    public double ordersCostSummary() {
         double cost = 0;
         for (Order o : orders)
             if (o != null)
@@ -142,4 +146,51 @@ public class TableOrdersManager implements OrdersManager {
     public int ordersQuantity() {
         return orders.length;
     }
+
+    @Override
+    public int getOrdersCountByDay(LocalDate date) {
+        int count = 0;
+        for (Order order : orders) {
+            if (date.equals(order.getDateTime().toLocalDate()))
+                count++;
+        }
+
+        return count;
+    }
+
+    @Override
+    public Order[] getOrdersByDay(LocalDate date) {
+        Order[] newOrders = new Order[getOrdersCountByDay(date)];
+        int j = 0;
+        for (Order order : orders) {
+            if (date.equals(order.getDateTime().toLocalDate())) {
+                newOrders[j] = order;
+                j++;
+            }
+        }
+
+        return newOrders;
+    }
+
+    @Override
+    public Order[] getClientOrder(Customer customer) {
+        int count = 0;
+        for (Order order : orders) {
+            if (customer.equals(order.getCustomer()))
+                count++;
+        }
+
+        Order[] newOrders = new Order[count];
+
+        int j = 0;
+        for (Order order : orders) {
+            if (customer.equals(order.getCustomer())) {
+                newOrders[j] = order;
+                j++;
+            }
+        }
+
+        return newOrders;
+    }
+
 }

@@ -2,12 +2,16 @@ package barBossHouse;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.time.LocalDateTime;
+import exceptionsPackage.NegativeSizeException;
+import exceptionsPackage.UnlawfulActionException;
 
 public class TableOrder implements Order{
 
     private MenuItem[] items;
     private int size;
     private Customer customer;
+    private LocalDateTime dateTime;
 
     private static final int DEFAULT_VALUE = 16;
 
@@ -274,5 +278,15 @@ public class TableOrder implements Order{
 
         return str.toString();
 
+    }
+
+    @Override
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    @Override
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 }
