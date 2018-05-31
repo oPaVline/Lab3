@@ -9,7 +9,7 @@ public class InternetOrder implements Order{
     private ListNode head;
     private ListNode tail;
     private Customer customer;
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTime; //todo где инициализация текущим временем?
 
     public InternetOrder() {
         size = 0;
@@ -20,6 +20,7 @@ public class InternetOrder implements Order{
         this.customer = customer;
     }
 
+    //todo где выброс UnlawfulActionException?
     public boolean add(MenuItem item) {
         ListNode node = new ListNode(item);
 
@@ -245,12 +246,13 @@ public class InternetOrder implements Order{
 
     @Override
     public boolean equals(Object obj) {
+        //todo где проверка даты заказа?
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
         InternetOrder order = (InternetOrder) obj;
 
-        if (!order.customer.equals(order.customer)) return false;
+        if (!customer.equals(order.customer)) return false;
 
         if (itemsQuantity() != order.itemsQuantity()) return false;
 
@@ -264,10 +266,11 @@ public class InternetOrder implements Order{
 
     @Override
     public int hashCode() {
+        //todo где использование даты заказа?
 
         int size = itemsQuantity();
 
-        MenuItem[] menuItems = getItems();
+        MenuItem[] menuItems = getItems();//todo не надо массив создавать. циклом проходи по нодам и извлекай value
 
         int hash = customer.hashCode() ^ Integer.hashCode(size)^head.hashCode()^tail.hashCode();
 
@@ -279,7 +282,7 @@ public class InternetOrder implements Order{
 
     @Override
     public String toString() {
-        MenuItem[] items = getItems();
+        MenuItem[] items = getItems(); //todo не надо массив создавать. циклом проходи по нодам и извлекай value
         StringBuilder str = new StringBuilder("InternetOrder:\n" + customer.toString()+size + " \n");
 
         for (MenuItem item : items) {

@@ -17,6 +17,7 @@ public class Dish extends MenuItem {
         return String.format("Dish: %s - %s", super.toString(), getDescription());
     }
 
+    //todo этот метод абсолютный дубль метода equals() суперкласса. Если это так, тогда можешь не переопределять метод вообще
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

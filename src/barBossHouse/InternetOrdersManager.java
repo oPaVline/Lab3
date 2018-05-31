@@ -17,6 +17,7 @@ public class InternetOrdersManager implements OrdersManager {
         for (Order o : orders) add(o);
     }
 
+    //todo где выброс AlreadyAddedException?
     public boolean add(Order order) {
         QueueNode node = new QueueNode(order);
 

@@ -10,11 +10,12 @@ import exceptionsPackage.UnlawfulActionException;
 public class TableOrdersManager implements OrdersManager {
     private Order[] orders;
 
-
+    //todo Где выброс исключения NegativeSizeException при попытке передать в конструктор отрицательное значение размера массива
     TableOrdersManager(int tableCount) {
         orders = new Order[tableCount];
     }
 
+    //todo где выброс AlreadyAddedException?
     public void add(Order order, int tableNumber) {
         orders[tableNumber] = order;
     }
@@ -85,7 +86,7 @@ public class TableOrdersManager implements OrdersManager {
         }
         return arrTableNum;
     }
-
+//todo где выброс NoFreeTableException?
     public int freeTableNumber() {
         for (int i = 0; i < orders.length; i++) {
             if (Objects.isNull(orders[i])) return i;

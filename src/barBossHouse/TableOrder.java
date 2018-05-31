@@ -11,14 +11,13 @@ public class TableOrder implements Order{
     private MenuItem[] items;
     private int size;
     private Customer customer;
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTime; //todo где инициализация текущим временем?
 
     private static final int DEFAULT_VALUE = 16;
-
     public TableOrder() {
         this(DEFAULT_VALUE, Customer.MATURE_UNKNOWN_CUSTOMER);
     }
-
+    //todo Где выброс исключения NegativeSizeException при попытке передать в конструктор отрицательное значение размера массива
     public TableOrder(int TableOrdersNumber, Customer customer) {
         this(new MenuItem[TableOrdersNumber], customer);
     }
@@ -29,7 +28,7 @@ public class TableOrder implements Order{
         size = 0;
     }
 
-
+//todo где выброс UnlawfulActionException?
     public boolean add(MenuItem menuItem) {
         if (size >= items.length) {
             MenuItem[] newMenuItem = new MenuItem[items.length * 2];
@@ -233,6 +232,7 @@ public class TableOrder implements Order{
 
     @Override
     public boolean equals(Object obj) {
+        //todo где проверка даты заказа?
         if (this == obj) return true;
 
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -253,7 +253,7 @@ public class TableOrder implements Order{
 
     @Override
     public int hashCode() {
-
+        //todo где использование даты заказа?
         int size = itemsQuantity();
 
         MenuItem[] menuItems = getItems();

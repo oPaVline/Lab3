@@ -22,7 +22,7 @@ public final class Drink extends MenuItem implements Alcoholable {
         super(name, description, cost);
 
         if (alcoholVol > 100 || alcoholVol < 0)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException();//todo ну сообщение то нужно добавить В Customer и Address есть, а тут нет(((
 
         this.type = type;
         this.alcoholVol = alcoholVol;
@@ -48,6 +48,7 @@ public final class Drink extends MenuItem implements Alcoholable {
         return isAlcoholicDrink() ?
                 String.format("Drink: %s, %s", type, super.toString()) :
                 String.format("Drink %s, %s, Aclohol: %d %s", type, super.toString(), alcoholVol, getDescription());
+                //todo alcoholVol - имеет тип double, в спецификатор %d - для целых чисел. Для вещственных можно использовать %f
     }
 
     @Override
@@ -55,7 +56,7 @@ public final class Drink extends MenuItem implements Alcoholable {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         if (!super.equals(obj)) return false;
-
+        //todo первые 3 условия проверяются в веряии equals() суперкласса - не дублируй код, вызывай версию метода суперкласса
         Drink drink = (Drink) obj;
 
         return super.equals(obj) && alcoholVol == drink.alcoholVol && type == drink.type;
