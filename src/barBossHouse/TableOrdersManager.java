@@ -4,19 +4,26 @@ import java.util.function.Predicate;
 import java.util.Objects;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import exceptionsPackage.AlreadyAddedException;
 import exceptionsPackage.NegativeSizeException;
+import exceptionsPackage.NoFreeTableException;
 import exceptionsPackage.UnlawfulActionException;
 
 public class TableOrdersManager implements OrdersManager {
     private Order[] orders;
 
-    //todo Где выброс исключения NegativeSizeException при попытке передать в конструктор отрицательное значение размера массива
+    //todo Где выброс исключения NegativeSizeException при попытке передать в конструктор отрицательное значение размера массива++
     TableOrdersManager(int tableCount) {
+        if (tableCount < 0)
+            throw new NegativeSizeException("Table count cannot be a negative number: " + tableCount);
         orders = new Order[tableCount];
     }
 
-    //todo где выброс AlreadyAddedException?
-    public void add(Order order, int tableNumber) {
+    //todo где выброс AlreadyAddedException?++
+    public void add(Order order, int tableNumber) throws AlreadyAddedException {
+        if (orders[tableNumber] != null)
+            throw new AlreadyAddedException("buzy!");
         orders[tableNumber] = order;
     }
 
@@ -86,11 +93,15 @@ public class TableOrdersManager implements OrdersManager {
         }
         return arrTableNum;
     }
-//todo где выброс NoFreeTableException?
-    public int freeTableNumber() {
-        for (int i = 0; i < orders.length; i++) {
+
+//todo где выброс NoFreeTableException?++
+    public int freeTableNumber() throws NoFreeTableException {
+        int i;
+        for (i= 0; i < orders.length; i++) {
             if (Objects.isNull(orders[i])) return i;
         }
+
+        if ( i == orders.length) throw new NoFreeTableException("There is no free tables!");
         return -1;
     }
 

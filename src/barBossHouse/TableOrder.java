@@ -1,5 +1,6 @@
 package barBossHouse;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Objects;
 import java.time.LocalDateTime;
@@ -11,25 +12,45 @@ public class TableOrder implements Order{
     private MenuItem[] items;
     private int size;
     private Customer customer;
-    private LocalDateTime dateTime; //todo где инициализация текущим временем?
+    private LocalDateTime dateTime; //todo где инициализация текущим временем?++
 
     private static final int DEFAULT_VALUE = 16;
     public TableOrder() {
         this(DEFAULT_VALUE, Customer.MATURE_UNKNOWN_CUSTOMER);
     }
-    //todo Где выброс исключения NegativeSizeException при попытке передать в конструктор отрицательное значение размера массива
-    public TableOrder(int TableOrdersNumber, Customer customer) {
-        this(new MenuItem[TableOrdersNumber], customer);
+
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.dateTime = orderTime;
+    }
+    public LocalDateTime getOrderTime() {
+        return dateTime;
+    }
+
+    //todo Где выброс исключения NegativeSizeException при попытке передать в конструктор отрицательное значение размера массива++
+    public TableOrder(int size, Customer customer) {
+        if (size < 0)
+            throw new NegativeSizeException("Number can't be negative");
+        items = new MenuItem[size];
+        this.customer = customer;
+        this.size = 0;
+        dateTime = LocalDateTime.now();
     }
 
     public TableOrder(MenuItem[] items, Customer customer) {
         this.items = items;
         this.customer = customer;
         size = 0;
+        dateTime = LocalDateTime.now();
     }
 
-//todo где выброс UnlawfulActionException?
+//todo где выброс UnlawfulActionException?++
     public boolean add(MenuItem menuItem) {
+        if (menuItem instanceof Drink) {
+            if (customer.getAge() < 18 || (LocalTime.now().getHour() > 23) || (LocalTime.now().getHour() < 6)) {
+                throw new UnlawfulActionException("You can't buy alcholol now!");
+            }
+        }
+
         if (size >= items.length) {
             MenuItem[] newMenuItem = new MenuItem[items.length * 2];
             System.arraycopy(items, 0, newMenuItem, 0, items.length);
@@ -232,7 +253,7 @@ public class TableOrder implements Order{
 
     @Override
     public boolean equals(Object obj) {
-        //todo где проверка даты заказа?
+        //todo где проверка даты заказа?++
         if (this == obj) return true;
 
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -242,6 +263,8 @@ public class TableOrder implements Order{
         if (!customer.equals(order.customer)) return false;
 
         if (itemsQuantity() != order.itemsQuantity()) return false;
+
+        if (!this.getOrderTime().equals(order.getOrderTime())) return false;
 
         String[] names = itemsNames();
 
@@ -253,12 +276,12 @@ public class TableOrder implements Order{
 
     @Override
     public int hashCode() {
-        //todo где использование даты заказа?
+        //todo где использование даты заказа?++
         int size = itemsQuantity();
 
         MenuItem[] menuItems = getItems();
 
-        int hash = customer.hashCode() ^ Integer.hashCode(size);
+        int hash = customer.hashCode() ^ Integer.hashCode(size)^dateTime.hashCode();
 
         for (MenuItem item : menuItems)
             hash ^= item.hashCode();

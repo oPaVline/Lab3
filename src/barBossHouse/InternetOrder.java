@@ -1,5 +1,8 @@
 package barBossHouse;
 
+import exceptionsPackage.UnlawfulActionException;
+
+import java.time.LocalTime;
 import java.util.Objects;
 import java.time.LocalDateTime;
 
@@ -9,7 +12,7 @@ public class InternetOrder implements Order{
     private ListNode head;
     private ListNode tail;
     private Customer customer;
-    private LocalDateTime dateTime; //todo где инициализация текущим временем?
+    private LocalDateTime dateTime; //todo где инициализация текущим временем?++
 
     public InternetOrder() {
         size = 0;
@@ -18,10 +21,24 @@ public class InternetOrder implements Order{
     public InternetOrder(MenuItem[] items, Customer customer) {
         for (MenuItem i : items) this.add(i);
         this.customer = customer;
+        dateTime = LocalDateTime.now();
     }
 
-    //todo где выброс UnlawfulActionException?
-    public boolean add(MenuItem item) {
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.dateTime = orderTime;
+    }
+    public LocalDateTime getOrderTime() {
+        return dateTime;
+    }
+
+    //todo где выброс UnlawfulActionException?++
+    public boolean add(MenuItem item) throws UnlawfulActionException {
+        if (item instanceof Drink) {
+            if (customer.getAge() < 18 || (LocalTime.now().getHour() > 23) || (LocalTime.now().getHour() < 6)) {
+                throw new UnlawfulActionException("You can't buy alcholol now!");
+            }
+        }
+
         ListNode node = new ListNode(item);
 
         if (head == null) {
@@ -246,7 +263,7 @@ public class InternetOrder implements Order{
 
     @Override
     public boolean equals(Object obj) {
-        //todo где проверка даты заказа?
+        //todo где проверка даты заказа?++
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
@@ -255,6 +272,8 @@ public class InternetOrder implements Order{
         if (!customer.equals(order.customer)) return false;
 
         if (itemsQuantity() != order.itemsQuantity()) return false;
+
+        if (!this.getOrderTime().equals(order.getOrderTime())) return false;
 
         String[] names = itemsNames();
 
@@ -266,29 +285,38 @@ public class InternetOrder implements Order{
 
     @Override
     public int hashCode() {
-        //todo где использование даты заказа?
+        //todo где использование даты заказа?++
 
-        int size = itemsQuantity();
+//        MenuItem[] menuItems = getItems();//todo не надо массив создавать. циклом проходи по нодам и извлекай value++
 
-        MenuItem[] menuItems = getItems();//todo не надо массив создавать. циклом проходи по нодам и извлекай value
+        int hash = customer.hashCode() ^ Integer.hashCode(size)^head.hashCode()^tail.hashCode()^dateTime.hashCode();
 
-        int hash = customer.hashCode() ^ Integer.hashCode(size)^head.hashCode()^tail.hashCode();
+        /*for (MenuItem item : menuItems)
+            hash ^= item.hashCode();*/
 
-        for (MenuItem item : menuItems)
-            hash ^= item.hashCode();
+        ListNode current = head;
+        while (current!=null) {
+            hash ^= current.value.hashCode();
+        }
 
         return hash;
     }
 
     @Override
     public String toString() {
-        MenuItem[] items = getItems(); //todo не надо массив создавать. циклом проходи по нодам и извлекай value
+//        MenuItem[] items = getItems(); //todo не надо массив создавать. циклом проходи по нодам и извлекай value++
         StringBuilder str = new StringBuilder("InternetOrder:\n" + customer.toString()+size + " \n");
+        ListNode current = head;
 
-        for (MenuItem item : items) {
-            str.append(items.toString())
+        while (current!=null) {
+            str.append(current.value.toString())
                     .append("\n");
         }
+
+       /* for (MenuItem item : items) {
+            str.append(items.toString())
+                    .append("\n");
+        }*/
 
         return str.toString();
 

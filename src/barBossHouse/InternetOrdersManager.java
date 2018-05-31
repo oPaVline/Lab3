@@ -1,5 +1,7 @@
 package barBossHouse;
 
+import exceptionsPackage.AlreadyAddedException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,12 +16,25 @@ public class InternetOrdersManager implements OrdersManager {
     }
 
     public InternetOrdersManager(Order[] orders) {
-        for (Order o : orders) add(o);
+        for (Order o : orders) {
+            try {
+                add(o);
+            } catch (AlreadyAddedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    //todo где выброс AlreadyAddedException?
-    public boolean add(Order order) {
+    //todo где выброс AlreadyAddedException?++
+    public boolean add(Order order) throws AlreadyAddedException {
         QueueNode node = new QueueNode(order);
+        QueueNode current = head;
+
+        while (current!=null){
+            if( current.value.getCustomer().equals(order.getCustomer()))
+                throw new AlreadyAddedException("Already exist!!");
+            current=current.next;
+        }
 
         if (head == null) {
             head = node;
