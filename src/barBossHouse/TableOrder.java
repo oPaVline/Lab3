@@ -250,6 +250,13 @@ public class TableOrder implements Order{
         this.customer = customer;
     }
 
+    public boolean hasAlcohol(){
+        for (MenuItem item : items)
+            if ((item instanceof Drink) && ((Drink) item).isAlcoholicDrink())
+                return true;
+        return false;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

@@ -3,12 +3,11 @@ package barBossHouse;
 import java.util.function.Predicate;
 import java.util.Objects;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-import exceptionsPackage.AlreadyAddedException;
-import exceptionsPackage.NegativeSizeException;
-import exceptionsPackage.NoFreeTableException;
-import exceptionsPackage.UnlawfulActionException;
+import exceptionsPackage.*;
+
+import static barBossHouse.Customer.MATURE_UNKNOWN_CUSTOMER;
+import static barBossHouse.Customer.NOT_MATURE_UNKNOWN_CUSTOMER;
 
 public class TableOrdersManager implements OrdersManager {
     private Order[] orders;
@@ -21,7 +20,9 @@ public class TableOrdersManager implements OrdersManager {
     }
 
     //todo где выброс AlreadyAddedException?++
-    public void add(Order order, int tableNumber) throws AlreadyAddedException {
+    public void add(Order order, int tableNumber) throws AlreadyAddedException, FreakingAlcoholicException {
+        if (freakingAlcoholicCustomer(order.getCustomer()))
+            throw new FreakingAlcoholicException("He's Freaking Alcoholic!");
         if (orders[tableNumber] != null)
             throw new AlreadyAddedException("buzy!");
         orders[tableNumber] = order;
@@ -205,4 +206,43 @@ public class TableOrdersManager implements OrdersManager {
         return newOrders;
     }
 
+    public Customer[] getArrayAlcoholicCustomer() {
+        for (Order order : orders) {
+            if (order.hasAlcohol())
+                order.getCustomer().orderAlcoholCustomerQuantity();
+        }
+
+        int sizeArr = 0;
+        for (Order order : orders) {
+            if (order.getCustomer().orderAlcoholCustomerQuantity() > 2) sizeArr++;
+
+        }
+
+        int j = 0;
+        Customer[] customersNew = new Customer[sizeArr];
+        for (Order order : orders) {
+            if (order.getCustomer().orderAlcoholCustomerQuantity() > 2) {
+                customersNew[j] = order.getCustomer();
+                j++;
+            }
+        }
+        return customersNew;
+    }
+
+
+
+    public boolean freakingAlcoholicCustomer(Customer customer){
+        if (customer.equals(NOT_MATURE_UNKNOWN_CUSTOMER)|| customer.equals(MATURE_UNKNOWN_CUSTOMER ))
+            return false;
+        for (Customer x : getArrayAlcoholicCustomer() ){
+            if (customer.equals(x))
+                return true;
+        }
+        return false;
+    }
 }
+
+
+
+
+

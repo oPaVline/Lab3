@@ -350,5 +350,15 @@ public class InternetOrder implements Order{
         this.dateTime = dateTime;
     }
 
+    public boolean hasAlcohol(){
+        ListNode node = head;
+        while (node!=null){
+            if ((node.value instanceof Drink) && ((Drink) node.value).isAlcoholicDrink())
+                return true;
+            node = node.next;
+        }
+        return false;
+    }
+
 }
 

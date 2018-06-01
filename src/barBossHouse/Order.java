@@ -30,6 +30,8 @@ public interface Order {
     LocalDateTime getDateTime();
     void setDateTime(LocalDateTime dateTime);
 
+    public boolean hasAlcohol();
+
     @Override
     String toString();
 

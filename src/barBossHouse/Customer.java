@@ -10,6 +10,7 @@ public final class Customer {
     private String secondName;
     private LocalDate birthDay;
     private Address address;
+    private int orderAlcohol;
 
     private static final String EMPTY_VALUE = "";
     private static final int EMPTY_NUMBER = -1;
@@ -51,6 +52,12 @@ public final class Customer {
     public Address getAddress() {
         return address;
     }
+
+    public int orderAlcoholCustomerQuantity()
+    {
+        return ++orderAlcohol;
+    }
+
 
 
     @Override

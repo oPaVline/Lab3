@@ -1,9 +1,12 @@
 package barBossHouse;
 
 import exceptionsPackage.AlreadyAddedException;
+import exceptionsPackage.FreakingAlcoholicException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
+import static barBossHouse.Customer.MATURE_UNKNOWN_CUSTOMER;
+import static barBossHouse.Customer.NOT_MATURE_UNKNOWN_CUSTOMER;
 
 public class InternetOrdersManager implements OrdersManager {
 
@@ -15,18 +18,16 @@ public class InternetOrdersManager implements OrdersManager {
         size = 0;
     }
 
-    public InternetOrdersManager(Order[] orders) {
+    public InternetOrdersManager(Order[] orders) throws AlreadyAddedException, FreakingAlcoholicException {
         for (Order o : orders) {
-            try {
-                add(o);
-            } catch (AlreadyAddedException e) {
-                e.printStackTrace();
-            }
+//                add(o);
         }
     }
 
     //todo где выброс AlreadyAddedException?++
-    public boolean add(Order order) throws AlreadyAddedException {
+    public boolean add(Order order) throws AlreadyAddedException, FreakingAlcoholicException {
+        if (freakingAlcoholicCustomer(order.getCustomer()))
+            throw new FreakingAlcoholicException("He's Freaking Alcoholic!");
         QueueNode node = new QueueNode(order);
         QueueNode current = head;
 
@@ -182,6 +183,50 @@ public class InternetOrdersManager implements OrdersManager {
 
         return count;
     }
+
+
+    public Customer[] getArrayAlcoholicCustomer(){
+        QueueNode node = head;
+
+        while (node != null) {
+            if (node.value.hasAlcohol()) {
+                node.value.getCustomer().orderAlcoholCustomerQuantity();
+            }
+            node = node.next;
+        }
+
+       int sizeArr = 0;
+       node = head;
+
+        while (node != null){
+        if (node.value.getCustomer().orderAlcoholCustomerQuantity() > 2) sizeArr++;
+    }
+
+        int j=0;
+        Customer [] customersNew = new Customer[sizeArr];
+        node = head;
+
+        while (node != null){
+            if (node.value.getCustomer().orderAlcoholCustomerQuantity()>2) {
+                customersNew[j] = node.value.getCustomer();
+                j++;
+            }
+        }
+        return customersNew;
+    }
+
+
+    public boolean freakingAlcoholicCustomer(Customer customer){
+        if (customer.equals(NOT_MATURE_UNKNOWN_CUSTOMER)|| customer.equals(MATURE_UNKNOWN_CUSTOMER ))
+            return false;
+        for (Customer x : getArrayAlcoholicCustomer() ){
+           if (customer.equals(x))
+               return true;
+        }
+        return false;
+    }
+
+
 
 
     private class QueueNode {
