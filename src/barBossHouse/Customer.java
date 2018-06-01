@@ -53,10 +53,15 @@ public final class Customer {
         return address;
     }
 
-    public int orderAlcoholCustomerQuantity()
+    public int orderAlcoholCustomerQuantity(int i)
     {
-        return ++orderAlcohol;
+        return orderAlcohol+=i;
     }
+
+    public int orderAlcoholCustomerQuantity(){
+        return orderAlcohol;
+    }
+
 
 
 

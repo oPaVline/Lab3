@@ -209,7 +209,7 @@ public class TableOrdersManager implements OrdersManager {
     public Customer[] getArrayAlcoholicCustomer() {
         for (Order order : orders) {
             if (order.hasAlcohol())
-                order.getCustomer().orderAlcoholCustomerQuantity();
+                order.getCustomer().orderAlcoholCustomerQuantity(1);
         }
 
         int sizeArr = 0;

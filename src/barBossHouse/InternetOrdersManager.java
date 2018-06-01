@@ -190,7 +190,7 @@ public class InternetOrdersManager implements OrdersManager {
 
         while (node != null) {
             if (node.value.hasAlcohol()) {
-                node.value.getCustomer().orderAlcoholCustomerQuantity();
+                node.value.getCustomer().orderAlcoholCustomerQuantity(1);
             }
             node = node.next;
         }
